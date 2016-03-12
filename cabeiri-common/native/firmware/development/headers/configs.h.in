@@ -1,0 +1,7 @@
+// the configured options and settings for Cabeiri_Firmware
+#define Tutorial_VERSION_MAJOR @Cabeiri_Firmware_VERSION_MAJOR@
+#define Tutorial_VERSION_MINOR @Cabeiri_Firmware_VERSION_MINOR@
+
+#cmakedefine ARDUINO
+#cmakedefine ARM
+#cmakedefine AVR

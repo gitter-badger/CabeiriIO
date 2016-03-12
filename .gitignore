@@ -2,6 +2,9 @@
 node_modules/
 typings/
 
+#ignore compiled firmware
+cabeiri-common/native/intermediate/
+
 npm-debug.log
 
 # Windows image file caches
