@@ -1,4 +1,4 @@
 import {bootstrap}    from 'angular2/platform/browser';
-import {Editor}       from './cabeiri_editor_standalone/cabeiri_editor_standalone';
+import {Editor}       from './modules/editor/editor';
 
 bootstrap(Editor);

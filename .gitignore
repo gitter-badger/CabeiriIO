@@ -3,7 +3,9 @@ node_modules/
 typings/
 
 #ignore compiled firmware
-cabeiri-common/native/intermediate/
+cabeiri-common/native/firmware/intermediate
+cabeiri-common/native/firmware/bin
+cabeiri-common/native/compiler/bin
 
 npm-debug.log
 

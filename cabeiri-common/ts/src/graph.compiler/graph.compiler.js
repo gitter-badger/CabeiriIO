@@ -11,27 +11,24 @@ System.register(['angular2/core'], function(exports_1, context_1) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1;
-    var GraphEditor;
+    var GraphCompiler;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             }],
         execute: function() {
-            GraphEditor = (function () {
-                function GraphEditor() {
+            GraphCompiler = (function () {
+                function GraphCompiler() {
                 }
-                GraphEditor = __decorate([
-                    core_1.Component({
-                        selector: 'cb-graph-editor',
-                        templateUrl: 'app/graph-editor/app.graph-editor.html'
-                    }), 
+                GraphCompiler = __decorate([
+                    core_1.Injectable(), 
                     __metadata('design:paramtypes', [])
-                ], GraphEditor);
-                return GraphEditor;
+                ], GraphCompiler);
+                return GraphCompiler;
             }());
-            exports_1("GraphEditor", GraphEditor);
+            exports_1("GraphCompiler", GraphCompiler);
         }
     }
 });
-//# sourceMappingURL=graph_editor.js.map
+//# sourceMappingURL=graph.compiler.js.map

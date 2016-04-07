@@ -5,33 +5,35 @@ project (Cabeiri_Firmware)
 set (Cabeiri_Firmware_VERSION_MAJOR 0)
 set (Cabeiri_Firmware_VERSION_MINOR 1)
 
-option(AVR
-  "Compile for avr platform" ON)
+option(ARDUINO "Compile for Arduino platform" ON)
+option(ARM "Compile for ARM platform" ON)
+option(AVR "Compile for AVR platform" ON)
 
 # configure a header file to pass some of the CMake settings
 # to the source code
 configure_file (
-  "${PROJECT_SOURCE_DIR}/configs.h.in"
-  "${PROJECT_BINARY_DIR}/configs.h"
+  "${PROJECT_SOURCE_DIR}firmware/headers/configs.h.in"
+  "${PROJECT_BINARY_DIR}intermediate/headers/configs.h"
   )
 
 # add the binary tree to the search path for include files
-# so that we will find configs.h
 include_directories ("${PROJECT_BINARY_DIR}")
+include_directories ("${PROJECT_BINARY_DIR}intermediate/headers")
+include_directories ("${PROJECT_BINARY_DIR}intermediate/native-instructions")
 
 # generate and add intermediate code
-include_directories ("${PROJECT_SOURCE_DIR}/MathFunctions")
-add_subdirectory (MathFunctions)
-set (EXTRA_LIBS ${EXTRA_LIBS} MathFunctions)
+include_directories ("${PROJECT_SOURCE_DIR}/compiler")
+add_subdirectory (compiler)
+set (EXTRA_LIBS ${EXTRA_LIBS} MakeIntermediate)
 
 # add the executable
 if (AVR)
     add_executable (Cabeiri_Firmware "${PROJECT_BINARY_DIR}src/avr/main.avr.cpp")
 endif(AVR)
 
-target_link_libraries (Tutorial  ${EXTRA_LIBS})
+target_link_libraries (Cabeiri_Firmware  ${EXTRA_LIBS})
 
 # add the install targets
-install (TARGETS Tutorial DESTINATION bin)
+install (TARGETS Cabeiri_Firmware DESTINATION bin)
 install (FILES "${PROJECT_BINARY_DIR}/configs.h"
          DESTINATION include)
