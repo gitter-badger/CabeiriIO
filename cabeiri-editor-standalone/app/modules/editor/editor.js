@@ -10,7 +10,7 @@ System.register(['angular2/core', 'cabeiri-common/graph'], function(exports_1, c
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, graph_1;
+    var core_1, graph_1, graph_2;
     var Editor;
     return {
         setters:[
@@ -19,6 +19,7 @@ System.register(['angular2/core', 'cabeiri-common/graph'], function(exports_1, c
             },
             function (graph_1_1) {
                 graph_1 = graph_1_1;
+                graph_2 = graph_1_1;
             }],
         execute: function() {
             Editor = (function () {
@@ -29,9 +30,10 @@ System.register(['angular2/core', 'cabeiri-common/graph'], function(exports_1, c
                     core_1.Component({
                         selector: 'cb-editor',
                         templateUrl: 'app/editor/editor.html',
-                        providers: [graph_1.GraphCompiler]
+                        providers: [graph_2.GraphCompiler],
+                        directives: [graph_1.GraphEditor]
                     }), 
-                    __metadata('design:paramtypes', [graph_1.GraphCompiler])
+                    __metadata('design:paramtypes', [graph_2.GraphCompiler])
                 ], Editor);
                 return Editor;
             }());

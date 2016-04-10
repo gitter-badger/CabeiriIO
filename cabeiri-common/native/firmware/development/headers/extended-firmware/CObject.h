@@ -1,4 +1,4 @@
-#include <array>
+//#include <array>
 
 class CObject
 {
@@ -11,6 +11,8 @@ class CObject
  */
 class CObjectRootSet
 {
+    //We avoid using the heap at all cost
+    //std::array<CObject*> is unacceptable :D
 
-    std::array<CObject>
+
 }

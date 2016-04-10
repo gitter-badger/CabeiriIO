@@ -5,8 +5,8 @@ project (Cabeiri_Firmware)
 set (Cabeiri_Firmware_VERSION_MAJOR 0)
 set (Cabeiri_Firmware_VERSION_MINOR 1)
 
-option(ARDUINO "Compile for Arduino platform" ON)
-option(ARM "Compile for ARM platform" ON)
+option(ARDUINO "Compile for Arduino platform" OFF)
+option(ARM "Compile for ARM platform" OFF)
 option(AVR "Compile for AVR platform" ON)
 
 # configure a header file to pass some of the CMake settings

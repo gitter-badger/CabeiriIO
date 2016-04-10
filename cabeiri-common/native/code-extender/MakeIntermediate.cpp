@@ -1,4 +1,4 @@
-#include "make-intermediate.h"
+#include "MakeIntermediate.h"
 // A simple program that builds a sqrt table
 #include <stdio.h>
 #include <stdlib.h>

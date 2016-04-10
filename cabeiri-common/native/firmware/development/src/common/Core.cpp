@@ -10,6 +10,9 @@ void Core::CabeiriLoop()
     //TODO Receive Server data.
     //
     //
+    //
+
+    EventManager.Pulse();
 
     //Happens last.
     EventManager.ExecuteEvents();

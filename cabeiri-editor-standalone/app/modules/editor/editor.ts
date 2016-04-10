@@ -5,7 +5,8 @@ import {GraphCompiler}  from 'cabeiri-common/graph';
 @Component({
     selector: 'cb-editor',
     templateUrl: 'app/editor/editor.html',
-    providers: [GraphCompiler]
+    providers: [GraphCompiler],
+    directives:[GraphEditor]
 })
 export class Editor
 {
