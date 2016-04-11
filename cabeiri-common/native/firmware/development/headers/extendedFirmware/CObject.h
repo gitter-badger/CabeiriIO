@@ -13,6 +13,6 @@ class CObjectRootSet
 {
     //We avoid using the heap at all cost
     //std::array<CObject*> is unacceptable :D
-
+    #include "./generated/RootSet.cpp"
 
 }
