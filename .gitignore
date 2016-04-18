@@ -1,6 +1,8 @@
 #ignore node modules and typings
 node_modules/
 typings/
+#ignore visual studio settings
+.vscode/
 
 #ignore compiled firmware
 cabeiri-common/native/firmware/intermediate
