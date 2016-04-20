@@ -1,8 +1,10 @@
 import{CTask}     from "./ctask";
 import{CType}     from "../ctype";
+import{CVoid}     from "../cliteral";
 import{CModule}   from "../cmodule";
+import{CPPFunction} from "../function/cppfunction";
 import{CFunction} from "../function/cfunction";
-import{CEvent, EventType}    from "./cevent";
+import{CEvent, CEVENTS_BASIC, CEventType}    from "./cevent";
 
 
 
@@ -22,17 +24,23 @@ export class Context implements CType
     /**
      * Entry points of that graph to execute various tasks
      */
-    public events : Map<EventType, CTask>;
+    public events : Map<CEventType, CTask>;
 
     constructor (){}
     
+    /**
+     * For each event, the context generate a function. this function will be called by the cabeiri system when appropriate depending on the event type.
+     */
     private GenerateEventFunctions() : Array<CFunction>
     {
         var functions : Array<CFunction>;
         for (var eventType in this.events)
         {
-            var functionName : string = EVENT_NAMES[eventType];
-            var eventFunction : CFunction = {name : functionName, id :0, parameters : [], };
+            var eventInfo : CEvent =CEVENTS_BASIC[eventType];
+            var eventFunction : CPPFunction = new CPPFunction(eventInfo.name, 0, new CVoid(), eventInfo.GetParameters());
+            eventFunction.body = "";
+            //ok start from here next time. go over the task tree of the event and call stuff in order.
+            //I was wondering. this tree thing is very cute (task), but how do I implement things like a if, or a for in the thing?
         }
         return functions;        
     }

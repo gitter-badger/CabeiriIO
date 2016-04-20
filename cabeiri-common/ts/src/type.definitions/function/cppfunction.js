@@ -38,4 +38,4 @@ System.register(["./cfunction"], function(exports_1, context_1) {
         }
     }
 });
-//# sourceMappingURL=cppunction.js.map
+//# sourceMappingURL=cppfunction.js.map

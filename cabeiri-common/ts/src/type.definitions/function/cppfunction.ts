@@ -11,9 +11,9 @@ export class CPPFunction extends CFunction
      */
     public body : string;
 
-    constructor (name : string, id :number)
+    constructor (name : string, id :number, returnType : CModule, parameters : Array<CDeclaration>)
     {
-        super(name, id);
+        super(name, id, returnType, parameters);
     }
 
     ///////////////

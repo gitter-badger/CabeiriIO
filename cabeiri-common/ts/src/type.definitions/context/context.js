@@ -1,9 +1,16 @@
-System.register([], function(exports_1, context_1) {
+System.register(["../function/cppfunction", "./cevent"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
+    var cppfunction_1, cevent_1;
     var Context;
     return {
-        setters:[],
+        setters:[
+            function (cppfunction_1_1) {
+                cppfunction_1 = cppfunction_1_1;
+            },
+            function (cevent_1_1) {
+                cevent_1 = cevent_1_1;
+            }],
         execute: function() {
             /**
              * Represents a module usage in a context. more precisely, it knows :
@@ -14,11 +21,14 @@ System.register([], function(exports_1, context_1) {
             Context = (function () {
                 function Context() {
                 }
+                /**
+                 * For each event, the context generate a function. this function will be called by the cabeiri system when appropriate depending on the event type.
+                 */
                 Context.prototype.GenerateEventFunctions = function () {
                     var functions;
                     for (var eventType in this.events) {
-                        var functionName = EVENT_NAMES[eventType];
-                        var eventFunction = { name: functionName, id: 0, parameters: [], };
+                        var eventInfo = cevent_1.CEVENTS_BASIC[eventType];
+                        var eventFunction = new cppfunction_1.CPPFunction(eventInfo.name, 0, eventInfo.GetParameters());
                     }
                     return functions;
                 };

@@ -22,7 +22,7 @@ export class CModule implements CType
     constructor (public name:string, private id : number)
     {}
 
-    ///////////////
+    //-------------------------------------------------------
     /// Reflect implementation
     ///
 

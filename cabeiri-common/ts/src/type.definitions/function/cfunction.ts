@@ -11,13 +11,7 @@ import{CType}      from "../ctype";
  */
 export abstract class CFunction implements CType
 {
-    /**
-     * Automatically available in body
-     */
-    public parameters : Array<CDeclaration>;
-    public returnType : CModule;
-
-    constructor (public name : string, public id:number) {}
+    constructor (public name : string, public id:number, public returnType : CModule, public parameters : Array<CDeclaration>) {}
 
     /**
      * Just for future use. Right now always void.

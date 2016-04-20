@@ -13,9 +13,11 @@ System.register([], function(exports_1, context_1) {
              *
              */
             CFunction = (function () {
-                function CFunction(name, id) {
+                function CFunction(name, id, returnType, parameters) {
                     this.name = name;
                     this.id = id;
+                    this.returnType = returnType;
+                    this.parameters = parameters;
                 }
                 /**
                  * Just for future use. Right now always void.

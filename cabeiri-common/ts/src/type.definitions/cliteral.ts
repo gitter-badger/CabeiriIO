@@ -23,15 +23,6 @@ class CLiteral implements CType
 }
 
 /**
- * Predefined types for literals. 
- * 
- */
-export const LITERALS : Array<CLiteral> = 
-[
-    new CVoid(), new CChar(), new CByte(), new CString()
-]
-
-/**
  * Follows all literals definition 
  */
 

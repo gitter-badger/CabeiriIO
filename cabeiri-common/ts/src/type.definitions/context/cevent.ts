@@ -1,8 +1,9 @@
+import {CDeclaration} from "../cdeclaration";
+
 export enum CEventType
 {
-    UserEvent,
-    PulseEvent,
-    EventTypeCount
+    UserEvent, /*parameters for this guy? hmmmmm*/ 
+    PulseEvent
 }
 
 /**
@@ -10,7 +11,34 @@ export enum CEventType
  */
 export class CEvent 
 {
+    /**
+     * Name of the event.
+     * hmm... hardcoded names huh. should probably just be a localization key.
+     */
     public name : string;
+    /**
+     * Indicates what values are given to the event handler.
+     * For user events, parameters should be defined somewhere else. TBD
+     */
+    protected parameters : Array<CDeclaration>;
     public eventType : CEventType;
+    
+    constructor( name : string, parameters : Array<CDeclaration>, eventType : CEventType)
+    {
+        this.parameters = parameters;
+        this.name = name;
+        this.eventType = eventType;
+    }
+    
+    public GetParameters() : Array<CDeclaration>
+    {
+        //watch out for the user events.
+        return this.parameters;
+    }
+    
 }
-export const EVENT_NAMES : Array<string> = ["User", "Pulse"];
+export const CEVENTS_BASIC : Array<CEvent> = 
+[
+    new CEvent("event_user", new Array<CDeclaration>(), CEventType.UserEvent), 
+    new CEvent("event_pulse", new Array<CDeclaration>(), CEventType.UserEvent)
+];
