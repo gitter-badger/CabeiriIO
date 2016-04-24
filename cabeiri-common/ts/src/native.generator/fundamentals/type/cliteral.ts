@@ -1,4 +1,4 @@
-import{CLang}             from "../../clang";
+import{CabeiriLang}             from "../../cabeiri.lang";
 import{CType}             from "./ctype";
 import{CID, CID_NONE}     from "../cid";
 
@@ -54,7 +54,7 @@ export var cstring : CLiteral;
  * Create all literals instances.
  * must be called once CLang is setup.
  */
-export function setup(clang : CLang) 
+export function setup(clang : CabeiriLang) 
 {
     cvoid = clang.registerCType("void", CLiteral);
     cint = clang.registerCType("int", CLiteral);

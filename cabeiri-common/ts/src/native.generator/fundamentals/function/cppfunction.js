@@ -1,4 +1,4 @@
-System.register(["./cfunction"], function(exports_1, context_1) {
+System.register(["./cfunction", "../cid"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __extends = (this && this.__extends) || function (d, b) {
@@ -6,12 +6,15 @@ System.register(["./cfunction"], function(exports_1, context_1) {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var cfunction_1;
+    var cfunction_1, cid_1;
     var CPPFunction;
     return {
         setters:[
             function (cfunction_1_1) {
                 cfunction_1 = cfunction_1_1;
+            },
+            function (cid_1_1) {
+                cid_1 = cid_1_1;
             }],
         execute: function() {
             /**
@@ -19,8 +22,9 @@ System.register(["./cfunction"], function(exports_1, context_1) {
              */
             CPPFunction = (function (_super) {
                 __extends(CPPFunction, _super);
-                function CPPFunction(name, id, returnType, parameters) {
-                    _super.call(this, name, id, returnType, parameters);
+                function CPPFunction(name, returnType, parameters, cid) {
+                    if (cid === void 0) { cid = cid_1.CID_NONE; }
+                    _super.call(this, name, returnType, parameters, cid);
                 }
                 CPPFunction.prototype.getIncludes = function () {
                     return this.includes;

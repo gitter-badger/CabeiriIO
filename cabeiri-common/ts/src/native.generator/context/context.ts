@@ -8,7 +8,7 @@ import{CModule}                             from "../fundamentals/type/cmodule";
 import{CDeclaration}                        from "../fundamentals/cdeclaration";
 import{CPPFunction}                         from "../fundamentals/function/cppfunction";
 import{CFunction}                           from "../fundamentals/function/cfunction";
-import{CLang}                               from "../clang";
+import{CabeiriLang}                         from "../cabeiri.lang";
 
 /**
  * Represents a module usage in a context. more precisely, it knows : 
@@ -28,7 +28,7 @@ export class Context implements CInterface
      */
     public events : Map<CEventType, CTask>;
 
-    constructor (public name : string, private clang : CLang){}
+    constructor (public name : string, private clang : CabeiriLang){}
     
     /**
      * For each event, the context generate a function. this function will be called by the cabeiri system when appropriate depending on the event type.

@@ -1,13 +1,10 @@
-System.register(["../fundamentals/cid", "./cevent", "../fundamentals/type/cliteral", "../fundamentals/function/cppfunction"], function(exports_1, context_1) {
+System.register(["./cevent", "../fundamentals/type/cliteral", "../fundamentals/function/cppfunction"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var cid_1, cevent_1, cliteral, cppfunction_1;
+    var cevent_1, cliteral, cppfunction_1;
     var Context;
     return {
         setters:[
-            function (cid_1_1) {
-                cid_1 = cid_1_1;
-            },
             function (cevent_1_1) {
                 cevent_1 = cevent_1_1;
             },
@@ -38,7 +35,7 @@ System.register(["../fundamentals/cid", "./cevent", "../fundamentals/type/cliter
                     for (var eventType in this.events) {
                         var eventInfo = cevent_1.CEVENTS_BASIC[eventType];
                         //Create the actual function object. 
-                        var eventFunction = new cppfunction_1.CPPFunction(eventInfo.name, cid_1.CID_NONE, cliteral.cvoid, eventInfo.GetParameters());
+                        var eventFunction = new cppfunction_1.CPPFunction(eventInfo.name, cliteral.cvoid, eventInfo.GetParameters());
                         eventFunction.body = "";
                         var task = this.events[eventType];
                     }

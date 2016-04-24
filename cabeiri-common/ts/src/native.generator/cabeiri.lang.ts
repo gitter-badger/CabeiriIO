@@ -13,7 +13,7 @@ import{CFunction}                               from "./fundamentals/function/cf
  * It contains all the module definitions, the function definitions, all the contexts.
  * This is where you will seek for an original class/function/etc when you have its id. It is also the entity that can attribute new ids.
  */
-export class CLang
+export class CabeiriLang
 {
     constructor() {}
     

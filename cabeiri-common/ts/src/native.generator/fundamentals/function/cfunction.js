@@ -1,9 +1,13 @@
-System.register([], function(exports_1, context_1) {
+System.register(["../cid"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
+    var cid_1;
     var CFunction;
     return {
-        setters:[],
+        setters:[
+            function (cid_1_1) {
+                cid_1 = cid_1_1;
+            }],
         execute: function() {
             /**
              * Represent a function in the user graph. This is a block of logic the user can insert in his graph.
@@ -11,11 +15,16 @@ System.register([], function(exports_1, context_1) {
              * Function take different parameters. All by reference for now. so if the user want to "retrun" a value, he must add a parameter and modify it.
              */
             CFunction = (function () {
-                function CFunction(name, id, returnType, parameters) {
+                /**
+                 * Construct a function.
+                 * cid is optionnal, as only static functions should have a cid. (worth make a separate type for those?)
+                 */
+                function CFunction(name, returnType, parameters, cid) {
+                    if (cid === void 0) { cid = cid_1.CID_NONE; }
                     this.name = name;
-                    this.id = id;
                     this.returnType = returnType;
                     this.parameters = parameters;
+                    this.cid = cid;
                 }
                 /**
                  * Just for future use. Right now always void.

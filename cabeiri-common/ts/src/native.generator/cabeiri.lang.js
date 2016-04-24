@@ -2,7 +2,7 @@ System.register(["./fundamentals/cid", "./context/context", "./fundamentals/type
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var cid_1, context_2, cliteral;
-    var CLang;
+    var CabeiriLang;
     return {
         setters:[
             function (cid_1_1) {
@@ -20,13 +20,13 @@ System.register(["./fundamentals/cid", "./context/context", "./fundamentals/type
              * It contains all the module definitions, the function definitions, all the contexts.
              * This is where you will seek for an original class/function/etc when you have its id. It is also the entity that can attribute new ids.
              */
-            CLang = (function () {
-                function CLang() {
+            CabeiriLang = (function () {
+                function CabeiriLang() {
                 }
                 /**
                  * Probably better to keep this not in the constructor.
                  */
-                CLang.prototype.init = function () {
+                CabeiriLang.prototype.init = function () {
                     //Setup literals
                     cliteral.setup(this);
                 };
@@ -34,32 +34,32 @@ System.register(["./fundamentals/cid", "./context/context", "./fundamentals/type
                  * Initialize a root context.
                  * Should eventually, be able to read that from a file/server
                  */
-                CLang.prototype.createRootContext = function () {
+                CabeiriLang.prototype.createRootContext = function () {
                     this.rootContext = new context_2.Context("root context", this);
                 };
                 /**
                  * Creates a new instance of the given ctype with the given name. a new cid will be given.
                  */
-                CLang.prototype.registerCType = function (name, ctype) {
+                CabeiriLang.prototype.registerCType = function (name, ctype) {
                     var cid = cid_1.CID.GetNewCID();
                     var newCType = new ctype(name, cid);
                     this.ctypes.set(cid, newCType);
                     return newCType;
                 };
-                CLang.prototype.getCType = function (typeID) {
+                CabeiriLang.prototype.getCType = function (typeID) {
                     return this.ctypes.get(typeID);
                 };
-                CLang.prototype.getStaticFunction = function (functionID) {
+                CabeiriLang.prototype.getStaticFunction = function (functionID) {
                     return this.staticCFunctions.get(functionID);
                 };
-                CLang.prototype.getRootContext = function () {
+                CabeiriLang.prototype.getRootContext = function () {
                     return this.rootContext;
                 };
-                return CLang;
+                return CabeiriLang;
             }());
-            exports_1("CLang", CLang);
+            exports_1("CabeiriLang", CabeiriLang);
         }
     }
 });
 //Start from here : the compiler should take care of turning this project in c++ via the various reflect functions :) 
-//# sourceMappingURL=clang.js.map
+//# sourceMappingURL=cabeiri.lang.js.map
