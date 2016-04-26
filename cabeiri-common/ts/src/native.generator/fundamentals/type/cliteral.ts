@@ -1,9 +1,10 @@
-import{CabeiriLang}             from "../../cabeiri.lang";
+import{CabeiriLang}       from "../../cabeiri.lang";
 import{CType}             from "./ctype";
 import{CID, CID_NONE}     from "../cid";
 
 /**
  * A lightweight implementation of CType for c++ literals
+ * This class will export nothing to c++ headers or body. it only has the identifier that is set (void, int, char, byte, etc.)
  */
 export class CLiteral extends CType
 {

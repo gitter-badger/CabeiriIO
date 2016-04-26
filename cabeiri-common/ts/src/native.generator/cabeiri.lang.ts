@@ -19,6 +19,7 @@ export class CabeiriLang
     
     /**
      * Probably better to keep this not in the constructor.
+     * So we can initialize at the moment we want.
      */
     public init() 
     {

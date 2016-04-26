@@ -42,8 +42,9 @@ export class Context implements CInterface
             var eventInfo : CEvent =CEVENTS_BASIC[eventType];
             //Create the actual function object. 
             var eventFunction : CPPFunction = new CPPFunction(eventInfo.name, cliteral.cvoid, eventInfo.GetParameters());
-            eventFunction.body = "";
+            
             var task : CTask = this.events[eventType];
+            eventFunction.body = task.reflectBody();
             
             //ok start from here next time. go over the task tree of the event and call stuff in order.
             //I was wondering. this tree thing is very cute (task), but how do I implement things like a if, or a for in the thing?
