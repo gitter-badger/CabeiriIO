@@ -1,4 +1,4 @@
-System.register(["./cfunction", "../cid"], function(exports_1, context_1) {
+System.register(["./cfunction", "../../cid/cid"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __extends = (this && this.__extends) || function (d, b) {
@@ -22,9 +22,9 @@ System.register(["./cfunction", "../cid"], function(exports_1, context_1) {
              */
             CPPFunction = (function (_super) {
                 __extends(CPPFunction, _super);
-                function CPPFunction(name, returnType, parameters, cid) {
+                function CPPFunction(name, returnType, parameters, clang, cid) {
                     if (cid === void 0) { cid = cid_1.CID_NONE; }
-                    _super.call(this, name, returnType, parameters, cid);
+                    _super.call(this, name, returnType, parameters, clang, cid);
                 }
                 CPPFunction.prototype.getIncludes = function () {
                     return this.includes;

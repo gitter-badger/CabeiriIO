@@ -11,12 +11,16 @@ System.register([], function(exports_1, context_1) {
              * will probably have to revisit this decision later on :)
              */
             CDeclaration = (function () {
-                function CDeclaration(type, name) {
-                    this.type = type;
+                function CDeclaration(ctypeID, name, clang) {
+                    this.ctypeID = ctypeID;
                     this.name = name;
+                    this.clang = clang;
                 }
+                /**
+                 * Retrieve the ctype object instance representing the type of this declaration.
+                 */
                 CDeclaration.prototype.getType = function () {
-                    return this.type;
+                    return this.clang.getCType(this.ctypeID);
                 };
                 return CDeclaration;
             }());

@@ -1,5 +1,6 @@
-import{CType}     from "./type/ctype" ;
-import{CID}         from "./cid" ;
+import{CType}       from "../ctype";
+import{CID}         from "../cid/cid";
+import{CabeiriLang} from "../cabeiri.lang";
 
 /**
  * Just a small class to define parameters for functions, or variable declaration in classes
@@ -8,10 +9,13 @@ import{CID}         from "./cid" ;
  */
 export class CDeclaration
 {
-    constructor(private type : CType, public name : string) {}
+    constructor(private ctypeID : CID, public name : string, private clang : CabeiriLang) {}
     
+    /**
+     * Retrieve the ctype object instance representing the type of this declaration.
+     */
     public getType() : CType
     {
-        return this.type;    
+        return this.clang.getCType(this.ctypeID);    
     }
 }

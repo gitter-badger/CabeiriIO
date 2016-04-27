@@ -1,7 +1,8 @@
 import{CFunction}       from "./cfunction" ;
-import{CType}           from "../type/ctype" ;
-import{CID, CID_NONE}   from "../cid" ;
+import{CType}           from "../../ctype" ;
+import{CID, CID_NONE}   from "../../cid/cid" ;
 import{CDeclaration}    from "../cdeclaration" ;
+import{CabeiriLang}     from "../../cabeiri.lang" ;
 
 /**
  * A function for which the user gives directly the cpp.
@@ -19,9 +20,9 @@ export class CPPFunction extends CFunction
      */
     public body : string;
 
-    constructor (name : string, returnType : CType, parameters : Array<CDeclaration>, cid : CID = CID_NONE)
+    constructor (name : string, returnType : CType, parameters : Array<CDeclaration>, clang : CabeiriLang, cid : CID = CID_NONE)
     {
-        super(name, returnType, parameters, cid);
+        super(name, returnType, parameters, clang, cid);
     }
     
     public getIncludes() : Array<string>

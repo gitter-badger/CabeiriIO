@@ -1,6 +1,6 @@
 import{CabeiriLang}       from "../../cabeiri.lang";
-import{CType}             from "./ctype";
-import{CID, CID_NONE}     from "../cid";
+import{CType}             from "../../ctype";
+import{CID, CID_NONE}     from "../../cid/cid";
 
 /**
  * A lightweight implementation of CType for c++ literals
@@ -8,9 +8,9 @@ import{CID, CID_NONE}     from "../cid";
  */
 export class CLiteral extends CType
 {
-    constructor (name : string, cid :CID) 
+    constructor (name : string, cid :CID, clang : CabeiriLang) 
     {
-        super(name, cid);
+        super(name, cid, clang);
     }
     /**
      * Return header cpp definition. meaning the class headers, function headers.
@@ -33,9 +33,9 @@ export class CLiteral extends CType
  */
 export class CString extends CLiteral
 {
-    constructor(name : string, cid : CID) 
+    constructor(name : string, cid : CID, clang : CabeiriLang) 
     {
-        super(name, cid);
+        super(name, cid, clang);
     }    
 }
 

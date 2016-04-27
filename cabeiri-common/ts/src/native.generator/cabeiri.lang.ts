@@ -1,7 +1,7 @@
-import{CID}                                     from "./fundamentals/cid";
+import{CID}                                     from "./cid/cid";
 import{Context}                                 from "./context/context";
 import{CEvent, CEVENTS_BASIC, CEventType}       from "./context/cevent";
-import{CType}                                   from "./fundamentals/type/ctype";
+import{CType}                                   from "./ctype";
 import *  as cliteral                           from "./fundamentals/type/cliteral";
 import{CModule}                                 from "./fundamentals/type/cmodule";
 import{CPPFunction}                             from "./fundamentals/function/cppfunction";
@@ -33,16 +33,18 @@ export class CabeiriLang
      */
     public createRootContext()
     {
-        this.rootContext = new Context("root context", this);
+        this.rootContext = new Context("root context", CID.GetNewCID(), this);
     }
     
     /**
      * Creates a new instance of the given ctype with the given name. a new cid will be given.
+     * @param name The name of the type (function name, module name, etc.)
+     * @param ctype The typescript class to use (ie : CModule, CLiteral, CFunction, etc.)
      */
-    public registerCType<T extends CType>( name : string, ctype: {new(name : string, cid : CID):T;}) : T
+    public registerCType<T extends CType>( name : string, ctype: {new(name : string, cid : CID, clang : CabeiriLang):T;}) : T
     {
         var cid : CID = CID.GetNewCID();
-        var newCType : T = new ctype(name, cid);
+        var newCType : T = new ctype(name, cid, this);
         this.ctypes.set(cid, newCType);
         return newCType;
     }

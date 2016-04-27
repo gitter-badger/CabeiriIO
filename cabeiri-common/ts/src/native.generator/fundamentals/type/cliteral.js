@@ -1,4 +1,4 @@
-System.register(["./ctype"], function(exports_1, context_1) {
+System.register(["../../ctype"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __extends = (this && this.__extends) || function (d, b) {
@@ -30,11 +30,12 @@ System.register(["./ctype"], function(exports_1, context_1) {
         execute: function() {
             /**
              * A lightweight implementation of CType for c++ literals
+             * This class will export nothing to c++ headers or body. it only has the identifier that is set (void, int, char, byte, etc.)
              */
             CLiteral = (function (_super) {
                 __extends(CLiteral, _super);
-                function CLiteral(name, cid) {
-                    _super.call(this, name, cid);
+                function CLiteral(name, cid, clang) {
+                    _super.call(this, name, cid, clang);
                 }
                 /**
                  * Return header cpp definition. meaning the class headers, function headers.
@@ -59,8 +60,8 @@ System.register(["./ctype"], function(exports_1, context_1) {
              */
             CString = (function (_super) {
                 __extends(CString, _super);
-                function CString(name, cid) {
-                    _super.call(this, name, cid);
+                function CString(name, cid, clang) {
+                    _super.call(this, name, cid, clang);
                 }
                 return CString;
             }(CLiteral));

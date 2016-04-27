@@ -1,7 +1,10 @@
-import{CFunction}   from "../fundamentals/function/cfunction";
-import{CModule}     from "../fundamentals/type/cmodule";
-import{CDeclaration}     from "../fundamentals/cdeclaration";
-import{CID}         from "../fundamentals/cid";
+import{CFunction}       from "../fundamentals/function/cfunction";
+import{CModule}         from "../fundamentals/type/cmodule";
+import{CType}           from "../ctype";
+import{CDeclaration}    from "../fundamentals/cdeclaration";
+import{CID}             from "../cid/cid";
+import{CabeiriLang}     from "../cabeiri.lang";
+
 
 /**
  * To execute functions in a graph, user adds in tasks. 
@@ -21,10 +24,10 @@ export class CTask
     /**
      * CTask constructor
      * @param name : name of the task.
-     * @param cfunction : function to be executed.
+     * @param cfunctionID : id of function to be executed. We just keep an ID, so that if the function is removed from its original module, we can detect it.
      * @param target : object (within the task context) on which to call the function (optional for static functions??)
      */
-    constructor (public name:string, public cfunction : CFunction, public target : CDeclaration)
+    constructor (public name:string, public cfunctionID : CID, public target : CDeclaration = null)
     {
         this.refresh();
         this.next = new Array<CTask>();
@@ -65,7 +68,7 @@ export class CTask
      * tags looks like the following
      * //[CABEIRI_OUT:"output"]
      * //[CABEIRI_OUT:"step_0"]
-     * Tags appear in c++ comments, so they won't conflict with any c++ syntax. 
+     * Tags for out flow appear in c++ comments, so they won't conflict with any c++ syntax. 
      */
     private findOutFlowNames() : Array<string>
     {
@@ -78,9 +81,21 @@ export class CTask
         return outFlowNames; 
     }
     
+    /**
+     * Retrieves the function this task needs to execute.
+     */
     public getCFunction() : CFunction
     {
-        return this.cfunction;
+        //TODO there is no garantee that the function still exists (the static one, or in the module).
+        //Yet, our local reference, is still valid. 
+        //Try to find the function on the given target module.
+        //var module : CModule = clang.;
+      //  if (this.target != null)
+        {
+        //    var module : CType = this.target.getType();
+        }
+        //return this.cfunction;
+        return null;
     }
     
     /**
@@ -90,7 +105,7 @@ export class CTask
      */
     public reflectBody() : string
     {
-        //TODO 
+        var body : string = this.getCFunction().reflectBody();
         return "";
     }
 }

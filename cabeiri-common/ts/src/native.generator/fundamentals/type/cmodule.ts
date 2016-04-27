@@ -1,7 +1,9 @@
-import{CType}               from "./ctype";
-import{CID}                 from "../cid";
+import{CType}               from "../../ctype";
+import{CID}                 from "../../cid/cid";
 import{CFunction}           from "../function/cfunction";
 import{CDeclaration}        from "../cdeclaration";
+import{CabeiriLang}         from "../../cabeiri.lang";
+
 
 /**
  * Every object of a graph has a CClass, describing its behavior, its content.
@@ -20,9 +22,9 @@ export class CModule extends CType
      */
     public variableDeclarations: Array<CDeclaration>;
 
-    constructor (public name:string, cid : CID)
+    constructor (public name:string, cid : CID, clang : CabeiriLang)
     {
-        super(name, cid);
+        super(name, cid, clang);
     }
   
     /**

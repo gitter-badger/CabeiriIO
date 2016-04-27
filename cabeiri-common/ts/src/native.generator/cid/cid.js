@@ -24,7 +24,8 @@ System.register([], function(exports_1, context_1) {
                 };
                 /**
                  * Generates unique id using date and random.
-                 * very low probability of having collision, still we should pay attention to that when uploading id on server.
+                 * very low probability of having collision across different clients,
+                 * still we should pay attention to that when uploading ids on server.
                  */
                 CID.generateUUID = function () {
                     var date = new Date().getTime();

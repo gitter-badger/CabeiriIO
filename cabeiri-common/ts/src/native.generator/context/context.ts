@@ -1,9 +1,8 @@
 import{CTask}                               from "./ctask";
-import{CID, CID_NONE}                       from "../fundamentals/cid";
+import{CID, CID_NONE}                       from "../cid/cid";
 import{CEvent, CEVENTS_BASIC, CEventType}   from "./cevent";
-import{CType}                               from "../fundamentals/type/ctype";
+import{CType}                               from "../ctype";
 import * as cliteral                        from "../fundamentals/type/cliteral";
-import{CInterface}                          from "../fundamentals/cinterface";
 import{CModule}                             from "../fundamentals/type/cmodule";
 import{CDeclaration}                        from "../fundamentals/cdeclaration";
 import{CPPFunction}                         from "../fundamentals/function/cppfunction";
@@ -16,7 +15,7 @@ import{CabeiriLang}                         from "../cabeiri.lang";
  *  - Where to find the parameters for each task (function call).
  *  - Which events are available a to which function they bind.   
  */
-export class Context implements CInterface
+export class Context extends CType
 {
     /**
      * A context can be represented as its own module
@@ -28,7 +27,10 @@ export class Context implements CInterface
      */
     public events : Map<CEventType, CTask>;
 
-    constructor (public name : string, private clang : CabeiriLang){}
+    constructor (name : string, cid : CID, clang : CabeiriLang)
+    {
+        super(name, cid, clang);
+    }
     
     /**
      * For each event, the context generate a function. this function will be called by the cabeiri system when appropriate depending on the event type.
@@ -41,7 +43,7 @@ export class Context implements CInterface
         {
             var eventInfo : CEvent =CEVENTS_BASIC[eventType];
             //Create the actual function object. 
-            var eventFunction : CPPFunction = new CPPFunction(eventInfo.name, cliteral.cvoid, eventInfo.GetParameters());
+            var eventFunction : CPPFunction = new CPPFunction(eventInfo.name, cliteral.cvoid, eventInfo.GetParameters(), this.clang);
             
             var task : CTask = this.events[eventType];
             eventFunction.body = task.reflectBody();

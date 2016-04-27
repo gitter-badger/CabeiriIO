@@ -1,10 +1,18 @@
-System.register(["../cid"], function(exports_1, context_1) {
+System.register(["../../ctype", "../../cid/cid"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var cid_1;
+    var __extends = (this && this.__extends) || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var ctype_1, cid_1;
     var CFunction;
     return {
         setters:[
+            function (ctype_1_1) {
+                ctype_1 = ctype_1_1;
+            },
             function (cid_1_1) {
                 cid_1 = cid_1_1;
             }],
@@ -14,17 +22,17 @@ System.register(["../cid"], function(exports_1, context_1) {
              * Function can be defined in two ways : by inputing the code directly of the body (CPPFunction) or by creating a subgraph (GraphFunction)
              * Function take different parameters. All by reference for now. so if the user want to "retrun" a value, he must add a parameter and modify it.
              */
-            CFunction = (function () {
+            CFunction = (function (_super) {
+                __extends(CFunction, _super);
                 /**
                  * Construct a function.
                  * cid is optionnal, as only static functions should have a cid. (worth make a separate type for those?)
                  */
-                function CFunction(name, returnType, parameters, cid) {
+                function CFunction(name, returnType, parameters, clang, cid) {
                     if (cid === void 0) { cid = cid_1.CID_NONE; }
-                    this.name = name;
+                    _super.call(this, name, cid, clang);
                     this.returnType = returnType;
                     this.parameters = parameters;
-                    this.cid = cid;
                 }
                 /**
                  * Just for future use. Right now always void.
@@ -60,7 +68,7 @@ System.register(["../cid"], function(exports_1, context_1) {
                     return name;
                 };
                 return CFunction;
-            }());
+            }(ctype_1.CType));
             exports_1("CFunction", CFunction);
         }
     }

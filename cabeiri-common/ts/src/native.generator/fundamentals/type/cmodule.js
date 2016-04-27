@@ -1,4 +1,4 @@
-System.register(["./ctype"], function(exports_1, context_1) {
+System.register(["../../ctype"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __extends = (this && this.__extends) || function (d, b) {
@@ -20,8 +20,8 @@ System.register(["./ctype"], function(exports_1, context_1) {
              */
             CModule = (function (_super) {
                 __extends(CModule, _super);
-                function CModule(name, cid) {
-                    _super.call(this, name, cid);
+                function CModule(name, cid, clang) {
+                    _super.call(this, name, cid, clang);
                     this.name = name;
                 }
                 /**

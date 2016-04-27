@@ -1,4 +1,4 @@
-System.register(["./fundamentals/cid", "./context/context", "./fundamentals/type/cliteral"], function(exports_1, context_1) {
+System.register(["./cid/cid", "./context/context", "./fundamentals/type/cliteral"], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var cid_1, context_2, cliteral;
@@ -25,6 +25,7 @@ System.register(["./fundamentals/cid", "./context/context", "./fundamentals/type
                 }
                 /**
                  * Probably better to keep this not in the constructor.
+                 * So we can initialize at the moment we want.
                  */
                 CabeiriLang.prototype.init = function () {
                     //Setup literals
@@ -35,14 +36,16 @@ System.register(["./fundamentals/cid", "./context/context", "./fundamentals/type
                  * Should eventually, be able to read that from a file/server
                  */
                 CabeiriLang.prototype.createRootContext = function () {
-                    this.rootContext = new context_2.Context("root context", this);
+                    this.rootContext = new context_2.Context("root context", cid_1.CID.GetNewCID(), this);
                 };
                 /**
                  * Creates a new instance of the given ctype with the given name. a new cid will be given.
+                 * @param name The name of the type (function name, module name, etc.)
+                 * @param ctype The typescript class to use (ie : CModule, CLiteral, CFunction, etc.)
                  */
                 CabeiriLang.prototype.registerCType = function (name, ctype) {
                     var cid = cid_1.CID.GetNewCID();
-                    var newCType = new ctype(name, cid);
+                    var newCType = new ctype(name, cid, this);
                     this.ctypes.set(cid, newCType);
                     return newCType;
                 };

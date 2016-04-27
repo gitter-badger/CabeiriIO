@@ -1,7 +1,7 @@
 import{CDeclaration}    from "../cdeclaration";
-import{CType}           from "../type/ctype";
-import{CInterface}      from "../cinterface";
-import{CID, CID_NONE}   from "../cid" ;
+import{CType}           from "../../ctype";
+import{CabeiriLang}     from "../../cabeiri.lang";
+import{CID, CID_NONE}   from "../../cid/cid" ;
 
 
 /**
@@ -9,13 +9,16 @@ import{CID, CID_NONE}   from "../cid" ;
  * Function can be defined in two ways : by inputing the code directly of the body (CPPFunction) or by creating a subgraph (GraphFunction)
  * Function take different parameters. All by reference for now. so if the user want to "retrun" a value, he must add a parameter and modify it.
  */
-export abstract class CFunction implements CInterface
+export abstract class CFunction extends CType
 {
     /**
      * Construct a function.
      * cid is optionnal, as only static functions should have a cid. (worth make a separate type for those?)
      */
-    constructor (public name : string, public returnType : CType, public parameters : Array<CDeclaration>, public cid : CID = CID_NONE) {}
+    constructor (name : string, public returnType : CType, public parameters : Array<CDeclaration>, clang : CabeiriLang, cid : CID = CID_NONE) 
+    {
+        super(name, cid, clang);
+    }
 
     /**
      * Just for future use. Right now always void.
