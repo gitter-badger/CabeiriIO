@@ -46,20 +46,45 @@ export class CTask
         {
             var flowName : string = this.flowControl.keys[flowNameIt];
             //Found a flow output that isn't in the function anymore, removes it.
-            if (!(flowName in outFlowNames))
+            if (outFlowNames.indexOf(flowName) != -1)
             {
                 this.flowControl.delete(flowName);
             }
         }
         
         //Find new out flow and add them to the flowControl map.
-        for (var flowName in outFlowNames)
+        for (var flowName of outFlowNames)
         {
             //Found a new flow output. Add it to the map.
-            if (!(flowName in this.flowControl.keys))
+            if (!this.flowControl.has(flowName))
             {
                 this.flowControl[flowName] = new Array<CTask>();
             }
+        }
+    }
+    
+    /**
+     * Utility function to navigate through the task graph.
+     * @param functor : will be called with every task of the graph.
+     */
+    public navigateTaskGraph = (functor : (task : CTask) => void) =>
+    {
+        //we ensured that "this" refers to the task here.
+        functor(this);
+        
+        //tasks within custom out flow control
+        this.flowControl.forEach((tasks : CTask[], outFlowName : string, flowControl : Map<String, CTask[]>) =>
+        {
+            for(var task of tasks)
+            {
+                task.navigateTaskGraph(functor);
+            }
+        });
+
+        //next tasks
+        for(var task of this.next)
+        {
+            task.navigateTaskGraph(functor);
         }
     }
     

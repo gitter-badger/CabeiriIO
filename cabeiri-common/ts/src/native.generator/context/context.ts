@@ -5,7 +5,7 @@ import{CType}                               from "../ctype";
 import * as cliteral                        from "../fundamentals/type/cliteral";
 import{CModule}                             from "../fundamentals/type/cmodule";
 import{CDeclaration}                        from "../fundamentals/cdeclaration";
-import{CPPFunction}                         from "../fundamentals/function/cppfunction";
+import{TaskFunction}                        from "../fundamentals/function/taskfunction";
 import{CFunction}                           from "../fundamentals/function/cfunction";
 import{CabeiriLang}                         from "../cabeiri.lang";
 
@@ -43,13 +43,8 @@ export class Context extends CType
         {
             var eventInfo : CEvent =CEVENTS_BASIC[eventType];
             //Create the actual function object. 
-            var eventFunction : CPPFunction = new CPPFunction(eventInfo.name, cliteral.cvoid, eventInfo.GetParameters(), this.clang);
-            
-            var task : CTask = this.events[eventType];
-            eventFunction.body = task.reflectBody();
-            
-            //ok start from here next time. go over the task tree of the event and call stuff in order.
-            //I was wondering. this tree thing is very cute (task), but how do I implement things like a if, or a for in the thing?
+            var eventFunction : TaskFunction = new TaskFunction(eventInfo.name, cliteral.cvoid, eventInfo.GetParameters(), this.clang);      
+            eventFunction.task = this.events[eventType];
         }
         return functions;        
     }
