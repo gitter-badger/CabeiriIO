@@ -5,7 +5,7 @@ import{CType}           from "../../ctype" ;
 import{CID, CID_NONE}   from "../../cid/cid" ;
 import{CDeclaration}    from "../cdeclaration" ;
 import{CabeiriLang}     from "../../cabeiri.lang" ;
-import{CEvent, CEVENTS_BASIC, CEventType}   
+import{CEvent, CEventType}   
                         from "../../context/cevent";
 
 
@@ -24,7 +24,7 @@ export class TaskFunction extends CFunction
     constructor (name : string, returnType : CType, parameters : Array<CDeclaration>, clang : CabeiriLang, cid : CID = CID_NONE)
     {
         super(name, returnType, parameters, clang, cid);
-        this.context.addEvents(new Array<CEventType>(CEventType.PulseEvent));
+        this.context.addEvents(new Array<CID>(CEvent.getBasicEvent(CEventType.PulseEvent)));
     }
     
     /**
@@ -32,7 +32,7 @@ export class TaskFunction extends CFunction
      */
     public clearTasks = () =>
     {
-        this.context.removeAllTasks(CEventType.PulseEvent);
+        this.context.removeAllTasks(CEvent.getBasicEvent(CEventType.PulseEvent));
     }
     
     /**
@@ -41,7 +41,7 @@ export class TaskFunction extends CFunction
      */
     public addRootTasks = (tasks : CTask[]) =>
     {
-        this.context.addTasks(CEventType.PulseEvent, tasks);
+        this.context.addTasks(CEvent.getBasicEvent(CEventType.PulseEvent), tasks);
     }
     
     /**
@@ -50,7 +50,7 @@ export class TaskFunction extends CFunction
      */
     public removeTasks = (tasksToRemove : string[]) =>
     {
-        this.context.removeTasks(CEventType.PulseEvent, tasksToRemove);
+        this.context.removeTasks(CEvent.getBasicEvent(CEventType.PulseEvent), tasksToRemove);
     }
     
     /**
@@ -84,7 +84,7 @@ export class TaskFunction extends CFunction
     {
         var includes : Array<string>;
         //Garanteed, a task function's context, always contains a pulse event, and only a pulse event.
-        for (var contextTask of this.context.getTasks(CEventType.PulseEvent))
+        for (var contextTask of this.context.getTasks(CEvent.getBasicEvent(CEventType.PulseEvent)))
         {
             contextTask.navigateTaskGraph((task : CTask) =>
             {
@@ -109,7 +109,7 @@ export class TaskFunction extends CFunction
         
         //locals (context variables) are declared in the body of the function, so they are reset every time the function runs.
         result += this.context.reflectLocalsDeclaration();
-        result += this.context.reflectEvent(CEventType.PulseEvent);
+        result += this.context.reflectEvent(CEvent.getBasicEvent(CEventType.PulseEvent));
         return result;
     }
 }

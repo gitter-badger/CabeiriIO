@@ -30,16 +30,21 @@ export abstract class CFunction extends CType
      * generate the c++ string for declaring the function parameters.
      * @return {string} [c++ string of the function parameters]
      */
-    public reflectParameters() :string
+    public static reflectParameters(parameters: Array<CDeclaration>) :string
     {
         var result : string;
-        for (var parameter of this.parameters)
+        for (var parameter of parameters)
         {
             //TODO shouldn't take basic types per reference.
             result = ", " + result + parameter.getType().reflectIdentifier() + "&" + parameter.name;
         }
         //remove first ", "
         return result.substr(2, result.length);
+    }
+    
+    public static reflectFunctionHeader(identifier: string, returnType : CType, parameters : Array<CDeclaration>)
+    {
+        return returnType.reflectIdentifier + " " + identifier + "(" + CFunction.reflectParameters(parameters) + ")";        
     }
     
     public abstract getIncludes() : Array<string>;
@@ -60,7 +65,7 @@ export abstract class CFunction extends CType
      */
     public reflectHeader () : string
     {
-        return this.reflectReturnType() + " " + this.reflectIdentifier() + "(" + this.reflectParameters() + ")";
+        return CFunction.reflectFunctionHeader(this.reflectIdentifier(), this.returnType, this.parameters);
     }
 
     /**

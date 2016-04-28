@@ -1,6 +1,7 @@
 import{CTask}                               from "./ctask";
+import{CabeiriLog}                          from "../../logging/logging";
 import{CID, CID_NONE}                       from "../cid/cid";
-import{CEvent, CEVENTS_BASIC, CEventType}   from "./cevent";
+import{CEvent, CEventType}                  from "./cevent";
 import{CType}                               from "../ctype";
 import * as cliteral                        from "../fundamentals/type/cliteral";
 import{CModule}                             from "../fundamentals/type/cmodule";
@@ -24,7 +25,7 @@ export class Context
      * They make no sense for native code generation.
      * I expect the editor will somehow save those orphan tasks in a sequence object. 
      */
-    protected events : Map<CEventType, Array<CTask>>;
+    protected events : Map<CID, Array<CTask>>;
     
     /**
      * All variables that are local to this context.
@@ -32,45 +33,44 @@ export class Context
      */
     protected locals : Array<CDeclaration>;
 
-    constructor (name : string, cid : CID, clang : CabeiriLang)
-    {}
+    constructor (protected clang : CabeiriLang){}
     
     /**
      * Add tasks to the given event.
-     * @param eventType : the event type to which to add. must already be in the context.
+     * @param cevent : the event to which to add. must already be in the context.
      * @param taskToRemove : the task name to be added.
      * @return {boolean} returns true if event type was found   
      */
-    public addTasks = (eventType : CEventType, tasks : CTask[]) : boolean =>
+    public addTasks = (ceventID : CID, tasks : CTask[]) : boolean =>
     {
-        if (!this.events.has(eventType))
+        if (!this.events.has(ceventID))
         {
             return false;
         }
         
-        var newRootTaskSet : Array<CTask> = this.events.get(eventType).concat(tasks);
-        this.events.set(CEventType.PulseEvent, newRootTaskSet);
+        var newRootTaskSet : Array<CTask> = this.events.get(ceventID).concat(tasks);
+        this.events.set(ceventID, newRootTaskSet);
         
         return true;     
     }
     
     /**
      * Remove tasks from the given event.
-     * @param eventType : the event type from which to remove. must already be in the context.
+     * @param cevent : the event from which to remove. must already be in the context.
      * @param taskToRemove : the task name to be removed.
      * @return {boolean} returns true if the event type was found.
      */
-    public removeTasks = (eventType : CEventType, tasksToRemove : string[]) : boolean =>
+    public removeTasks = (ceventID : CID, tasksToRemove : string[]) : boolean =>
     {
-        if (!this.events.has(eventType))
+        if (!this.events.has(ceventID))
         {
             return false;
         }
         
         var newRootTaskSet : Array<CTask> = 
-            this.events.get(eventType).filter(
+            this.events.get(ceventID).filter(
                 (task : CTask) => {return tasksToRemove.indexOf(task.name) != -1;});
-        this.events.set(CEventType.PulseEvent, newRootTaskSet);
+        this.events.set(ceventID, newRootTaskSet);
         
         return true;
     }
@@ -80,14 +80,14 @@ export class Context
      * @param eventType : the event type from which to remove. must already be in the context.
      * @return {boolean} returns true if the event type was found.
      */
-    public removeAllTasks = (eventType : CEventType) : boolean =>
+    public removeAllTasks = (ceventID : CID) : boolean =>
     {
-        if (!this.events.has(eventType))
+        if (!this.events.has(ceventID))
         {
             return false;
         }
         
-        this.events.set(CEventType.PulseEvent, new Array<CTask>());
+        this.events.set(ceventID, new Array<CTask>());
         
         return true;
     }
@@ -96,15 +96,24 @@ export class Context
      * Add events to the context. Will not reset existing events.
      * @param eventTypes : the event types to be added. 
      */
-    public addEvents(eventTypes : CEventType[])
+    public addEvents(ceventIDs : CID[])
     {
-        for (var eventType of eventTypes)
+        for (var ceventID of ceventIDs)
         {
-            if (!this.events.has(eventType))
+            if (this.clang.getCEvent(ceventID) == null)
             {
-                this.events.set(eventType, new Array<CTask>());
+                CabeiriLog.warning("Cannot add event to context, given cid doesn't match any event.");
+            }
+            if (!this.events.has(ceventID))
+            {
+                this.events.set(ceventID, new Array<CTask>());
             }
         }
+    }
+    
+    public forEachEvents(functor : (tasks : CTask[], ceventCID : CID) => void)
+    {
+       this.events.forEach(functor);
     }
    
     /**
@@ -112,9 +121,9 @@ export class Context
      * @param eventType : the event type for which we want the tasks.
      * @return {Array<CTask>}
      */
-    public getTasks(eventType : CEventType) : Array<CTask>
+    public getTasks(ceventID : CID) : Array<CTask>
     {
-        return this.events.get(eventType);
+        return this.events.get(ceventID);
     }
     
     /**
@@ -170,9 +179,9 @@ export class Context
      * this code should be put in a function where the locals are available. 
      * @param 
      */
-    public reflectEvent(eventType : CEventType) : string
+    public reflectEvent(ceventID : CID) : string
     {
-        var tasks : Array<CTask> = this.getTasks(eventType);
+        var tasks : Array<CTask> = this.getTasks(ceventID);
         var result : string = "";
         for (var task of tasks)
         {

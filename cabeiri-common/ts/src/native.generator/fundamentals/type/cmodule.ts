@@ -60,7 +60,7 @@ export class CModule extends CType
             //TODO for now, everything is public
             result += "\t" + varDec.getType().reflectIdentifier() + " " + varDec.name +";\n";
         }
-        result += "\n\t//FUNCTION DEFINITIONS\n\n";
+        result += "\n\t//FUNCTION DECLARATIONS\n\n";
 
         for (var fct of this.functions)
         {
@@ -82,7 +82,7 @@ export class CModule extends CType
 
         for (var fct of this.functions)
         {
-            result += fct.reflectReturnType() + " " + this.reflectIdentifier() + "::" + fct.reflectIdentifier() + "(" + fct.reflectParameters()+ ")" + "\n";
+            result += fct.reflectReturnType() + " " + this.reflectIdentifier() + "::" + fct.reflectIdentifier() + "(" + CFunction.reflectParameters(fct.parameters)+ ")" + "\n";
             result += "{\n"
             result += fct.reflectBody();
             result += "}\n\n"
