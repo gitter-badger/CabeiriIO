@@ -1,5 +1,6 @@
 import{CFunction}       from "../fundamentals/function/cfunction";
 import{CModule}         from "../fundamentals/type/cmodule";
+import{CabeiriLog}      from "../../logging/logging";
 import{CType}           from "../ctype";
 import{CDeclaration}    from "../fundamentals/cdeclaration";
 import{CID}             from "../cid/cid";
@@ -22,15 +23,99 @@ export class CTask
     private flowControl : Map<string, Array<CTask>>;
     
     /**
+     * Maps the task's function parameters to variables in the context.
+     * key : string : function parameter name
+     */
+    private parametersAssignment : Map<string, CDeclaration>;
+    
+    /**
+     * Weither or not we should put the output the function code directly, or output a call to the function.
+     * Incompatible with a target being not null.
+     * Right now, if we have any flow control, we automatically inline, even though this is a bit limitating.
+     */
+    private inline : boolean = false;
+    
+    /**
      * CTask constructor
      * @param name : name of the task.
      * @param cfunctionID : id of function to be executed. We just keep an ID, so that if the function is removed from its original module, we can detect it.
      * @param target : object (within the task context) on which to call the function (optional for static functions??)
      */
-    constructor (public name:string, public cfunctionID : CID, public target : CDeclaration = null)
+    constructor (public name:string, public cfunctionID : CID, protected clang : CabeiriLang, public target : CDeclaration = null)
     {
         this.refresh();
         this.next = new Array<CTask>();
+    }
+    
+    /**
+     * Validate the given assignement for a function parameter of the task.
+     * @param parameterName : Name of the parameter of the function the will be assigned
+     * @param variableToUse : variable which we assign to the parameter.
+     * @param fctParameters : the function parameters.
+     * @param outMsgs : any issue will be reported in this array.
+     * @return {boolean}
+     */
+    public validateAssignment(parameterName : string, variableToUse : CDeclaration, fctParameters : Array<CDeclaration>, outMsgs : Array<string>) : boolean
+    {
+        if (fctParameters.length == 0)
+        {
+            outMsgs.push("Could not find any matching function parameter for assignment.");
+            return false;
+        }
+        else if (fctParameters.length > 1)
+        {
+            outMsgs.push("Found too many function parameters for assignment.");
+            return false;
+        }
+        else if (!variableToUse.getType().canAssignTo(fctParameters[0].getType()))
+        {
+            outMsgs.push("Trying to assign a variable which type doesn't math the function parameter's type.");
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Validate if all current assignements are valid.
+     * @param fctParameters : the function parameters.
+     * @param outMsgs : any issue will be reported in this array.
+     */
+    public validateAssignments(fctParameters : Array<CDeclaration>, outMsgs : Array<string>) : boolean
+    {
+        var success : boolean = false;
+        this.parametersAssignment.forEach((variableToUse: CDeclaration, parameter : string) =>
+        {
+            success = success && this.validateAssignment(parameter, variableToUse, fctParameters, outMsgs);
+        });
+        if (this.parametersAssignment.size != fctParameters.length)
+        {
+            outMsgs.push("Task parameters assignment do not match the number of parameters of the function.");
+            success = false;
+        }
+        
+        return success;
+    }
+    
+    /**
+     * Bind a variable to a parameter of the function.
+     */
+    public setParameterAssignment(parameterName : string, variableToUse : CDeclaration) 
+    {
+        var fctParameters : Array<CDeclaration> = this.getCFunction().getParameters().filter((dcl : CDeclaration) => {return dcl.name == parameterName;});
+        var msgs : Array<string> = new Array<string>();
+        if (this.validateAssignment(parameterName, variableToUse, fctParameters, msgs))
+        {
+            this.parametersAssignment.set(parameterName, variableToUse);
+        } 
+        else
+        {
+            //invalid to get errors at this point.
+            for (var msg of msg)
+            {
+                CabeiriLog.warning(msg);
+            }   
+        }
     }
     
     /**
@@ -61,6 +146,20 @@ export class CTask
                 this.flowControl[flowName] = new Array<CTask>();
             }
         }
+        
+        //If we have "out flow" meaning we are structural code like a "if" or a "for" loop. then we need to inline this function code. 
+        this.inline = this.flowControl.size != 0;
+        
+        //find deprecated parameter assignment and remove them
+        var fctParameters : Array<CDeclaration> = this.getCFunction().getParameters();
+        for (var declaration of fctParameters)
+        {
+            //Found a flow output that isn't in the function anymore, removes it.
+            if (this.parametersAssignment.has(declaration.name))
+            {
+                this.parametersAssignment.delete(declaration.name);
+            }
+        }
     }
     
     /**
@@ -89,19 +188,23 @@ export class CTask
     }
     
     /**
-     * Find the out flow control tags in the associated function code.
+     * Regular expression to find flow control tags in native code.
      * tags looks like the following
      * //[CABEIRI_OUT:"output"]
      * //[CABEIRI_OUT:"step_0"]
      * Tags for out flow appear in c++ comments, so they won't conflict with any c++ syntax. 
      */
+    public static regexp = /\/\/\s*[CABEIRI_OUT\s*:\s*\"[A-Za-z]+\w*\"\s*\]/;
+    
+    /**
+     * Find the out flow control tags in the associated function code.
+     */
     private findOutFlowNames() : Array<string>
     {
         var outFlowNames : Array<string>;
         
-        var regexp = /\/\/\s*[CABEIRI_OUT\s*:\s*\"[A-Za-z]+\w*\"\s*\]/;
         var body : string = this.getCFunction().reflectBody();
-        outFlowNames = regexp.exec(body);
+        outFlowNames = CTask.regexp.exec(body);
         
         return outFlowNames; 
     }
@@ -110,17 +213,92 @@ export class CTask
      * Retrieves the function this task needs to execute.
      */
     public getCFunction() : CFunction
-    {
-        //TODO there is no garantee that the function still exists (the static one, or in the module).
-        //Yet, our local reference, is still valid. 
+    { 
         //Try to find the function on the given target module.
-        //var module : CModule = clang.;
-      //  if (this.target != null)
+        if (this.target != null)
         {
-        //    var module : CType = this.target.getType();
+            var ctype : CType = this.target.getType();
+            if (!(ctype instanceof(CModule)))
+            {
+                CabeiriLog.error("Task function's target is not a module. This is invalid.");
+                return null;
+            }
+            else
+            {
+                var cmodule : CModule = <CModule>(ctype);
+                return cmodule.getFunction(this.cfunctionID);
+            }
         }
-        //return this.cfunction;
-        return null;
+        else
+        {
+            //static function. it is not on a module
+            var ctype : CType = this.clang.getCType(this.cfunctionID);
+            if (!(ctype instanceof(CFunction)))
+            {
+                CabeiriLog.error("Task function's id isn't referencing a valid function.");
+                return null;
+            }
+            return <CFunction> ctype;
+        }
+    }
+    
+    /**
+     * Output the native code to perform a call to the function.
+     */
+    public reflectFunctionCall(cfunction : CFunction, parameters : Array<CDeclaration>) : string
+    {
+        var result : string;
+        if (this.target != null)
+        {
+            result += this.target.name + "."
+        }
+        
+        result += cfunction.reflectIdentifier() + "(";
+        for (var param of parameters)
+        {
+            //TODO allow accessing nested variables.
+            result += this.parametersAssignment[param.name].name + ", ";
+        }
+        // remove last ", "
+        result = result.substr(0, result.length - 2);
+        result += ");\n";
+        
+        return result;
+    }
+    
+    /**
+     * Output the native code to perform a call to the function.
+     */
+    public reflectFunctionInline(cfunction : CFunction, parameters : Array<CDeclaration>) : string
+    {
+        //Add a scope so we can declare some extra variable without conflicts...
+        var result : string = "{\n";
+        
+        //We are inlining, so any parameter must become a correctly named variable in our scope.
+        for (var param of parameters)
+        {
+            //TODO allow accessing nested variables.
+            result += param.getType() + "& " + param.name + " = " + this.parametersAssignment[param.name].name + ";\n";             
+        }
+        
+        //inline the function body.
+        result += cfunction.reflectBody();    
+          
+        //Replace in the function body, the out flow tags by the actual code of the corresponding tasks.
+        this.flowControl.forEach((tasks : CTask[], flowTag: string) => 
+        {
+            var outFlowBody : string = "";
+            for (var task of tasks)
+            {
+                outFlowBody += task.reflectBody();
+            }
+            result.replace(flowTag, outFlowBody);
+        });
+        
+        //close the scope.
+        result += "}\n";
+        
+        return result;
     }
     
     /**
@@ -130,7 +308,28 @@ export class CTask
      */
     public reflectBody() : string
     {
-        //add the native code to call the cfunction. then recurse on next and flowControl
-        return "";
+        var cfunction : CFunction = this.getCFunction();
+        var parameters : Array<CDeclaration> = cfunction.getParameters();
+        var validateMsgs : Array<string> = new Array<string>();
+        var result : string = "";
+        
+        if (!this.validateAssignments(parameters, validateMsgs))
+        {
+            //Error at this point is wrong.
+            for (var validateMsg of validateMsgs)
+            {
+                CabeiriLog.warning(validateMsg);                
+            }
+        }
+        else if (this.inline)
+        {
+            result += this.reflectFunctionInline(cfunction, parameters);
+        }
+        else
+        {    
+            result += this.reflectFunctionCall(cfunction, parameters);
+        }
+
+        return result;
     }
 }

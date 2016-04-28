@@ -18,4 +18,9 @@ export class CDeclaration
     {
         return this.clang.getCType(this.ctypeID);    
     }
+    
+    public getTypeID() : CID
+    {
+        return this.ctypeID;
+    }
 }

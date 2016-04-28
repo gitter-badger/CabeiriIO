@@ -15,9 +15,17 @@ export abstract class CFunction extends CType
      * Construct a function.
      * cid is optionnal, as only static functions should have a cid. (worth make a separate type for those?)
      */
-    constructor (name : string, public returnType : CType, public parameters : Array<CDeclaration>, clang : CabeiriLang, cid : CID = CID_NONE) 
+    constructor (name : string, public returnType : CType, protected parameters : Array<CDeclaration>, clang : CabeiriLang, cid : CID = CID_NONE) 
     {
         super(name, cid, clang);
+    }
+    
+    /**
+     * returns a shallow copy of the parameters array.
+     */
+    public getParameters() : Array<CDeclaration>
+    {
+        return this.parameters.slice();
     }
 
     /**

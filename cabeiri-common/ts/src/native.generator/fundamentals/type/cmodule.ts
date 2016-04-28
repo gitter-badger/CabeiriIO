@@ -15,7 +15,7 @@ export class CModule extends CType
      * The functions have all the semantics for this class.
      * @type {Array<CFunction>}
      */
-    public functions: Array<CFunction>;
+    private functions: Map<CID, CFunction>;
     /**
      * All the nested object classes composing this object.
      * @type {Array<CClass>}
@@ -26,6 +26,15 @@ export class CModule extends CType
     {
         super(name, cid, clang);
     }
+    
+    /**
+     * Returns the function from this module.
+     * @param cid : CID of the function.
+     */
+    public getFunction(cid : CID) : CFunction
+    {
+        return this.functions.get(cid);
+    }
   
     /**
      * The includes that should be added above the c++ file body for the functions to compile.
@@ -33,10 +42,10 @@ export class CModule extends CType
     public GenerateFunctionIncludes() : Array<string>
     {
        var allIncludes : Array<string>;
-       for (var fct of this.functions)
+       this.functions.forEach ((fct: CFunction, cid : CID) =>
        {
             allIncludes.concat(fct.getIncludes());
-       }
+       });
        
        return allIncludes;
     } 
@@ -62,10 +71,10 @@ export class CModule extends CType
         }
         result += "\n\t//FUNCTION DECLARATIONS\n\n";
 
-        for (var fct of this.functions)
+        this.functions.forEach ((fct: CFunction, cid : CID) =>
         {
             result += "\t" + fct.reflectHeader() +";\n";
-        }
+        });
 
         result += "};\n\n"
         return result;
@@ -80,14 +89,14 @@ export class CModule extends CType
         var result : string;
         result += "\n\t//FUNCTION DEFINITIONS\n\n";
 
-        for (var fct of this.functions)
+        this.functions.forEach ((fct: CFunction, cid : CID) =>
         {
-            result += fct.reflectReturnType() + " " + this.reflectIdentifier() + "::" + fct.reflectIdentifier() + "(" + CFunction.reflectParameters(fct.parameters)+ ")" + "\n";
+            result += fct.reflectReturnType() + " " + this.reflectIdentifier() + "::" + fct.reflectIdentifier() + "(" + CFunction.reflectParameters(fct.getParameters())+ ")" + "\n";
             result += "{\n"
             result += fct.reflectBody();
             result += "}\n\n"
-        }
-
+        });
+        
         return result;
     }
 

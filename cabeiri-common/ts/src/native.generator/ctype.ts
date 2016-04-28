@@ -52,4 +52,15 @@ export abstract class CType implements CInterface
             return value;
         }
     }
+    
+    /**
+     * Tells weither or not a native instance of this ctype can be assigned to a native instance of another ctype.
+     * Returns true if the type are the same. Could eventually account for inheritance.
+     * @param other : type of the instance the should be assigned. 
+     */
+    public canAssignTo(other : CType) : boolean
+    {
+        //what of implicit conversion? for modules, it ain't support yet. but it'd be nice to test for basic types.
+        return this.getCID() == other.getCID();
+    }
 }
