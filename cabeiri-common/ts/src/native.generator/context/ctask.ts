@@ -18,7 +18,8 @@ export class CTask
     private next : Array<CTask>;
     /**
      * Gives the next tasks in the graph to be executed from within the task function execution.
-     * The keys of this array should be populate
+     * flow control is for code structure like "if" or "for" statement, allowing to execute subsequent task from within the task's function
+     * The keys of this array should be populate.
      */
     private flowControl : Map<string, Array<CTask>>;
     
