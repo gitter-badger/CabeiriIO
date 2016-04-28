@@ -58,13 +58,13 @@ export class CModule extends CType
         for (var varDec of this.variableDeclarations)
         {
             //TODO for now, everything is public
-            result += "\t" + varDec.getType().reflectIdentifier() + " " + varDec.name +"\n;";
+            result += "\t" + varDec.getType().reflectIdentifier() + " " + varDec.name +";\n";
         }
         result += "\n\t//FUNCTION DEFINITIONS\n\n";
 
         for (var fct of this.functions)
         {
-            result += "\t" + fct.reflectHeader() +"\n;";
+            result += "\t" + fct.reflectHeader() +";\n";
         }
 
         result += "};\n\n"
