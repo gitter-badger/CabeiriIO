@@ -55,10 +55,7 @@ export class CabeiriLang
      * key is the id.
      */
     public ctypes : Map<CID, CType>;
-    /**
-     * All the static functions available in the app. 
-     */
-    public staticCFunctions : Map<CID, CFunction>;
+    
     /**
      * The root context of the application. entry point for the user to define its project behavior. 
      * Equivalent of the main in c/c++
@@ -69,11 +66,6 @@ export class CabeiriLang
     public getCType(typeID : CID) : CType
     {
         return this.ctypes.get(typeID);
-    }
-    
-    public getStaticFunction(functionID : CID) : CFunction
-    {
-        return this.staticCFunctions.get(functionID);
     }
     
     public getRootContext() : Context
