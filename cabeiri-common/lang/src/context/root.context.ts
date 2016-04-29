@@ -1,6 +1,6 @@
 import{CTask}                               from "./ctask";
 import{CID, CID_NONE}                       from "../cid/cid";
-import{CabeiriLog}                          from "../../logging/logging";
+import{CabeiriLog}                          from "../logging/logging";
 import{CEvent, CEventType}                  from "./cevent";
 import{Context}                             from "./context";
 import{CType}                               from "../ctype";

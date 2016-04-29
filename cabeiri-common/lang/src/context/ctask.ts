@@ -1,6 +1,6 @@
 import{CFunction}       from "../fundamentals/function/cfunction";
 import{CModule}         from "../fundamentals/type/cmodule";
-import{CabeiriLog}      from "../../logging/logging";
+import{CabeiriLog}      from "../logging/logging";
 import{CType}           from "../ctype";
 import{CDeclaration}    from "../fundamentals/cdeclaration";
 import{CID}             from "../cid/cid";

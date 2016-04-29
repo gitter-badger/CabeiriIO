@@ -28,7 +28,7 @@ export class CEvent
      */
     private static ceventBasic : Map<CEventType, CID>;
     
-    public static getBasicEvent(ceventType : CEventType) : CEvent
+    public static getBasicEvent(ceventType : CEventType) : CID
     {
         if (ceventType != CEventType.UserEvent)
         {
