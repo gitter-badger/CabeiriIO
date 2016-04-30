@@ -9,7 +9,7 @@
     "lite": "lite-server",
     "typings": "typings",
     "postinstall": "typings install",
-    "test" : "" //nothing for now.
+    "test" : "" 
   },
   "license": "ISC",
   "dependencies":

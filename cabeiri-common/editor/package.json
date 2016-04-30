@@ -8,7 +8,7 @@
     "tsc:w": "tsc -w",
     "typings": "typings",
     "postinstall": "typings install",
-    "test" : "" //nothing for now.
+    "test" : "" 
   },
   "license": "ISC",
   "dependencies":
