@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+  - "5.1"
+env:
+  - TEST_DIR=cabeiri-common/editor
+  - TEST_DIR=cabeiri-common/lang
+  - TEST_DIR=cabeiri-editor-standalone
+script: cd $TEST_DIR && npm install && npm test

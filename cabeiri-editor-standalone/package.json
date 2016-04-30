@@ -8,7 +8,8 @@
     "tsc:w": "tsc -w",
     "lite": "lite-server",
     "typings": "typings",
-    "postinstall": "typings install"
+    "postinstall": "typings install",
+    "test" : "" //nothing for now.
   },
   "license": "ISC",
   "dependencies":
